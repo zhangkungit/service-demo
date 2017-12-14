@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.service.modules.user.dao.persistence.UserDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.service.modules.user.entity.User">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="user_id" property="userId" jdbcType="VARCHAR"/>
+		<result column="account" property="account" jdbcType="VARCHAR"/>
+		<result column="password" property="password" jdbcType="VARCHAR"/>
+		<result column="user_name" property="userName" jdbcType="VARCHAR"/>
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,user_id,account,password,user_name,nick_name,del_flag,create_user_id,last_update_user_id,create_date,last_update_date
+    </sql>
+
+     <!-- 查询User详情 -->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from demo_user
+        where del_flag = 0 and id = #{id,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除User-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+   	 	delete from demo_user
+    	where id = #{id,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增User-->
+    <insert id="insert"  parameterType="com.yryz.service.modules.user.entity.User">
+	    insert into demo_user (kid,user_id,account,password,user_name,nick_name,del_flag,create_user_id,last_update_user_id,create_date,last_update_date)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{userId,jdbcType=VARCHAR}
+				,#{account,jdbcType=VARCHAR}
+				,#{password,jdbcType=VARCHAR}
+				,#{userName,jdbcType=VARCHAR}
+				,#{nickName,jdbcType=VARCHAR}
+				,#{delFlag,jdbcType=TINYINT}
+				,#{createUserId,jdbcType=VARCHAR}
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+			,NOW()
+			,NOW()
+	    )
+	</insert>
+	
+	<!--按需新增User-->
+    <insert id="insertByPrimaryKeySelective" parameterType="java.util.Map">
+	    insert into ${tableName}
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="userId != null and userId != ''">
+			user_id,
+	    </if>
+        <if test="account != null and account != ''">
+			account,
+	    </if>
+        <if test="password != null and password != ''">
+			password,
+	    </if>
+        <if test="userName != null and userName != ''">
+			user_name,
+	    </if>
+        <if test="nickName != null and nickName != ''">
+			nick_name,
+	    </if>
+        <if test="delFlag != null">
+			del_flag,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="userId != null and userId != ''">
+			#{userId,jdbcType=VARCHAR},
+	    </if>
+        <if test="account != null and account != ''">
+			#{account,jdbcType=VARCHAR},
+	    </if>
+        <if test="password != null and password != ''">
+			#{password,jdbcType=VARCHAR},
+	    </if>
+        <if test="userName != null and userName != ''">
+			#{userName,jdbcType=VARCHAR},
+	    </if>
+        <if test="nickName != null and nickName != ''">
+			#{nickName,jdbcType=VARCHAR},
+	    </if>
+        <if test="delFlag != null">
+			#{delFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改User-->   
+    <update id="updateByUserId" parameterType="com.yryz.service.modules.user.entity.User">
+        update demo_user
+        <set>
+             <if test="id != null">
+    			id = #{id,jdbcType=BIGINT},
+    		</if>
+            <if test="account != null and account != ''">
+    			account = #{account,jdbcType=VARCHAR},
+    		</if>
+            <if test="password != null and password != ''">
+    			password = #{password,jdbcType=VARCHAR},
+    		</if>
+            <if test="userName != null and userName != ''">
+    			user_name = #{userName,jdbcType=VARCHAR},
+    		</if>
+            <if test="nickName != null and nickName != ''">
+    			nick_name = #{nickName,jdbcType=VARCHAR},
+    		</if>
+             <if test="delFlag != null">
+    			del_flag = #{delFlag,jdbcType=TINYINT},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+        </set>
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+	<!--删除用户-->
+	<update id="deleteByUserId" parameterType="com.yryz.service.modules.user.entity.User">
+		update demo_user
+		<set>
+			  del_flag = 1
+		</set>
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</update>
+    
+    <!-- 查询User列表 -->
+    <select id="selectList" parameterType="com.yryz.service.modules.user.dto.UserDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from demo_user where del_flag = 0
+        <if test="startDate != null and startDate != '' ">
+             <![CDATA[  AND create_date >= #{startDate} ]]>
+		</if>
+		<if test="endDate != null and endDate != ''">
+	            <![CDATA[ AND create_date <= #{endDate}   ]]>
+		</if>
+    </select>
+
+
+	<!-- 查询User列表 -->
+	<select id="selectByUserId" parameterType="com.yryz.service.modules.user.entity.User" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from demo_user where del_flag = 0
+		AND user_id = #{userId,jdbcType=VARCHAR}
+	</select>
+    
+</mapper>

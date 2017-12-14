@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!-- 引入配置文件 -->
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:component.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 全局配置文件，依赖confige的bean需设定对此depends-on -->
+    <bean id="config" class="com.yryz.common.context.Context">
+        <constructor-arg index="0" value="component.properties"/>
+    </bean>
+
+
+    <bean id="brave" class="com.github.kristofa.brave.dubbo.BraveFactoryBean">
+        <property name="serviceName" value="demo-user"/>
+        <property name="zipkinHost" value="http://192.168.64.129:9411/"/>
+        <property name="rate" value="1.0"/>
+    </bean>
+
+    <!--servletBrave-->
+    <!--<bean id="servletBrave" class="com.yryz.common.brave.ZipkinBraveFactoryBean">
+        <property name="serviceName" value="idAPI"/>
+        <property name="zipkinHost" value="http://192.168.64.129:9411/"/>
+    </bean>
+
+    <bean id="braveFilter" class="com.github.kristofa.brave.servlet.BraveServletFilter">
+        <constructor-arg
+                value="#{servletBrave.serverRequestInterceptor()}"/>
+        <constructor-arg
+                value="#{servletBrave.serverResponseInterceptor()}"/>
+        <constructor-arg>
+            <bean
+                    class="com.github.kristofa.brave.http.DefaultSpanNameProvider"/>
+        </constructor-arg>
+    </bean>-->
+
+
+    <!--id start-->
+    <bean class="com.yryz.service.modules.id.common.GenPrimaryKeyFactory">
+        <property name="generateKeyService" ref="generateKeyService"/>
+    </bean>
+
+    <bean id="expandKeyExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2"/>
+        <property name="maxPoolSize" value="2"/>
+        <property name="queueCapacity" value="5"/>
+    </bean>
+
+    <bean id="loadPrepBuffExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="3"/>
+        <property name="maxPoolSize" value="3"/>
+        <property name="queueCapacity" value="5"/>
+    </bean>
+    <!--id start-->
+
+    <context:component-scan base-package="com.yryz.service.modules" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+
+    <import resource="classpath:spring-application.xml"/>
+    <import resource="classpath:spring-dubbo.xml"/>
+    <import resource="classpath:spring-job.xml"/>
+    <import resource="classpath:spring-mq.xml"/>
+    <!--<import resource="classpath:kafkaProducer.xml"/>-->
+    <!--<import resource="classpath:kafkaConsumer.xml"/>-->
+    <import resource="classpath:spring-mongodb.xml"/>
+    <!--<import resource="classpath:spring-context-jedis.xml"/>-->
+</beans>
