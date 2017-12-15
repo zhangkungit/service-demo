@@ -75,6 +75,21 @@
 
     <context:component-scan base-package="com.yryz.service.modules"/>
 
+
+    <!-- ID generator -->
+    <!-- 用完即弃的WorkerIdAssigner，依赖DB操作 -->
+    <bean id="disposableWorkerIdAssigner" class="com.yryz.service.modules.id2.service.worker.DisposableWorkerIdAssigner"/>
+    <bean id="defaultUidGenerator" class="com.yryz.service.modules.id2.service.impl.DefaultUidGenerator"
+          lazy-init="false">
+        <property name="workerIdAssigner" ref="disposableWorkerIdAssigner"/>
+
+        <!-- Specified bits & epoch as your demand. No specified the default value will be used -->
+        <property name="timeBits" value="${idGenerator.timeBits}"/>
+        <property name="workerBits" value="${idGenerator.workerBits}"/>
+        <property name="seqBits" value="${idGenerator.seqBits}"/>
+        <property name="epochStr" value="${idGenerator.epochStr}"/>
+    </bean>
+
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.yryz.service.modules.**.dao.persistence"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>

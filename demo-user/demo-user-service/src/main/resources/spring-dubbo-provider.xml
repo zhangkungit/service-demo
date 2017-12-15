@@ -16,5 +16,10 @@
     <!--idAPI-->
     <dubbo:service interface="com.yryz.service.modules.id.api.IdAPI" ref="idAPI"
                    registry="demo"/>
+    <!--id2-->
+    <dubbo:service interface="com.yryz.service.modules.id2.IdAPI" ref="idProvider"
+                   registry="demo"/>
+
+
 
 </beans>

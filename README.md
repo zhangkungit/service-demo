@@ -1,5 +1,5 @@
 # service-demo
-技术语言工程
+技术预研工程
 ## demo-user
 包含
     1 dbsync服务，基于canal实现数据（支持分库分表）进行同步，其HA机制基于canal的HA机制
