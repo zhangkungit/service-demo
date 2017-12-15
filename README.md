@@ -1,7 +1,7 @@
 # service-demo
 技术预研工程
 ## demo-user
-包含
+###包含
     1 dbsync服务，基于canal实现数据（支持分库分表）进行同步，其HA机制基于canal的HA机制
     2 id服务，发号器，生成分布式唯一id，目前提供3中实现
         2.1 Twitter的snakeflow算法生成唯一id，生成18唯一id
